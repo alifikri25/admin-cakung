@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@uiw/react-md-editor": "^4.0.8",
+    "gh-pages": "^6.3.0",
     "axios": "^1.13.2",
     "lucide-react": "^0.553.0",
     "react": "^19.2.0",
