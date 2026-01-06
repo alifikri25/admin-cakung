@@ -40,7 +40,7 @@ export default function ImageUploader({ images, onChange }) {
             <div
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
+                className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors cursor-pointer bg-white dark:bg-gray-800"
             >
                 <input
                     type="file"
@@ -51,9 +51,9 @@ export default function ImageUploader({ images, onChange }) {
                     className="hidden"
                 />
                 <label htmlFor="file-upload" className="cursor-pointer">
-                    <div className="text-gray-600">
+                    <div className="text-gray-600 dark:text-gray-300">
                         <p className="text-lg font-medium">Click or drag images here</p>
-                        <p className="text-sm mt-1">Support for multiple images</p>
+                        <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">Support for multiple images</p>
                     </div>
                 </label>
             </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { Plus } from "lucide-react";
 import "./StrukturAdmin.css";
 import logo from "../assets/logo.png";
 
@@ -120,6 +121,7 @@ export default function StrukturAdmin() {
   const [tree, setTree] = useState([]);
   const [editNode, setEditNode] = useState(null);
   const [addParent, setAddParent] = useState(null);
+  const [showAddNew, setShowAddNew] = useState(false);
   const nodeRefs = useRef({});
 
   const buildTree = (data) => {
@@ -177,8 +179,9 @@ export default function StrukturAdmin() {
     });
   };
 
-  const saveAdd = ({ name, position, photo }) => {
-    const parentNode = flat.find((n) => n.id === addParent);
+  const saveAdd = ({ name, position, photo }, isRootNode = false) => {
+    const parentId = isRootNode ? 0 : addParent;
+    const parentNode = flat.find((n) => n.id === parentId);
     const level = parentNode ? parentNode.level + 1 : 1;
     const role = "user";
 
@@ -189,7 +192,7 @@ export default function StrukturAdmin() {
         name,
         position,
         photo,
-        parent_id: addParent || 0,
+        parent_id: parentId,
         level,
         role,
       }),
@@ -205,6 +208,7 @@ export default function StrukturAdmin() {
         setFlat(updated);
         setTree(buildTree(updated));
         setAddParent(null);
+        setShowAddNew(false);
       })
       .catch((err) => {
         console.error("POST error:", err);
@@ -255,6 +259,16 @@ export default function StrukturAdmin() {
 
       <div className="org-chart">{tree.map(renderTree)}</div>
 
+      {/* Floating Add Button */}
+      <button
+        className="btn-add-new"
+        onClick={() => setShowAddNew(true)}
+        title="Tambah Anggota Baru"
+      >
+        <Plus size={24} />
+        <span className="btn-add-new-text">Tambah Anggota</span>
+      </button>
+
       {editNode && (
         <Modal
           title="Edit Data"
@@ -266,6 +280,14 @@ export default function StrukturAdmin() {
       )}
 
       {addParent && <Modal title="Tambah Anggota" onClose={() => setAddParent(null)} onSave={saveAdd} />}
+
+      {showAddNew && (
+        <Modal
+          title="Tambah Anggota Baru"
+          onClose={() => setShowAddNew(false)}
+          onSave={(data) => saveAdd(data, true)}
+        />
+      )}
     </div>
   );
 }

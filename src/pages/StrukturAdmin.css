@@ -1,11 +1,66 @@
 /* =============================
+   CSS VARIABLES FOR THEMING
+============================= */
+:root {
+  --bg-primary: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --bg-photo: linear-gradient(135deg, #e0e0e0, #f8f8f8);
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --text-muted: #9ca3af;
+  --text-label: #334155;
+  --border-primary: #eaeaea;
+  --border-secondary: #d1d5db;
+  --border-input: #d1d5db;
+  --border-modal: #cbd5e1;
+  --shadow-card: 0 8px 20px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 12px 28px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.25), 0 4px 10px rgba(0, 0, 0, 0.12);
+  --line-color: #b0b7c3;
+  --modal-backdrop: rgba(15, 23, 42, 0.55);
+  --btn-cancel-bg: transparent;
+  --btn-cancel-bg-hover: #f1f5f9;
+  --btn-cancel-border: #cbd5e1;
+  --btn-cancel-border-hover: #94a3b8;
+  --btn-cancel-text: #475569;
+}
+
+.dark {
+  --bg-primary: #1e293b;
+  --bg-card: #334155;
+  --bg-input: #475569;
+  --bg-photo: linear-gradient(135deg, #475569, #334155);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-label: #cbd5e1;
+  --border-primary: #475569;
+  --border-secondary: #64748b;
+  --border-input: #64748b;
+  --border-modal: #64748b;
+  --shadow-card: 0 8px 20px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2);
+  --shadow-card-hover: 0 12px 28px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.3);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+  --line-color: #64748b;
+  --modal-backdrop: rgba(0, 0, 0, 0.7);
+  --btn-cancel-bg: transparent;
+  --btn-cancel-bg-hover: #475569;
+  --btn-cancel-border: #64748b;
+  --btn-cancel-border-hover: #94a3b8;
+  --btn-cancel-text: #cbd5e1;
+}
+
+/* =============================
    CONTAINER & HEADER
 ============================= */
 .container {
   position: relative;
   min-height: 100vh;
   padding: 40px 20px 80px;
-  background: #f5f7fa;
+  background: var(--bg-primary);
+  font-family: sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .logo {
@@ -20,7 +75,8 @@ h1 {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  color: #2c3e50;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 /* =============================
@@ -32,6 +88,8 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .tree-node {
@@ -46,6 +104,7 @@ h1 {
   justify-content: center;
   gap: 60px;
   margin-top: 60px;
+  margin-left: 20px;
   flex-wrap: nowrap;
 }
 
@@ -56,21 +115,19 @@ h1 {
   position: relative;
   width: 200px;
   padding: 16px 14px 18px;
-  background: #ffffff;
+  background: var(--bg-card);
   border-radius: 14px;
   text-align: center;
   cursor: pointer;
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.08),
-    0 2px 6px rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+  margin: 10px;
 }
 
 .node:hover {
   transform: translateY(-6px);
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.12),
-    0 4px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-card-hover);
 }
 
 /* =============================
@@ -82,8 +139,12 @@ h1 {
   margin: 0 auto 10px;
   border-radius: 50%;
   overflow: hidden;
-  background: linear-gradient(135deg, #e0e0e0, #f8f8f8);
-  border: 3px solid #eaeaea;
+  background: var(--bg-photo);
+  border: 3px solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .photo img {
@@ -95,18 +156,24 @@ h1 {
 /* =============================
    TEXT INFO
 ============================= */
+.info {
+  margin-top: 5px;
+}
+
 .name {
   margin-bottom: 4px;
   font-size: 15px;
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 .title {
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
-  color: #7f8c8d;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
 }
 
 /* =============================
@@ -147,8 +214,9 @@ h1 {
 }
 
 .lines-svg line {
-  stroke: #b0b7c3;
+  stroke: var(--line-color);
   stroke-width: 2;
+  transition: stroke 0.3s ease;
 }
 
 /* =============================
@@ -161,7 +229,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 23, 42, 0.55);
+  background: var(--modal-backdrop);
   backdrop-filter: blur(4px);
 }
 
@@ -171,12 +239,11 @@ h1 {
 .modal {
   width: 360px;
   padding: 26px 26px 24px;
-  background: #ffffff;
+  background: var(--bg-card);
   border-radius: 16px;
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.25),
-    0 4px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-modal);
   animation: modalFade 0.25s ease-out;
+  transition: background-color 0.3s ease;
 }
 
 @keyframes modalFade {
@@ -184,6 +251,7 @@ h1 {
     opacity: 0;
     transform: translateY(12px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -195,7 +263,24 @@ h1 {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.3px;
-  color: #1e293b;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+/* =============================
+   MODAL FIELD
+============================= */
+.modal-field {
+  margin-bottom: 14px;
+}
+
+.modal-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-label);
+  transition: color 0.3s ease;
 }
 
 /* =============================
@@ -206,14 +291,15 @@ h1 {
   padding: 12px 14px;
   margin-bottom: 14px;
   border-radius: 10px;
-  border: 1.5px solid #d1d5db;
+  border: 1.5px solid var(--border-input);
   font-size: 14px;
-  color: #111827;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+  color: var(--text-primary);
+  background: var(--bg-input);
+  transition: border 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .modal input::placeholder {
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 .modal input:focus {
@@ -264,14 +350,15 @@ h1 {
    CANCEL (BUTTON 2)
 ============================= */
 .modal-actions button:nth-child(2) {
-  background: transparent;
-  border: 1.5px solid #cbd5e1;
-  color: #475569;
+  background: var(--btn-cancel-bg);
+  border: 1.5px solid var(--btn-cancel-border);
+  color: var(--btn-cancel-text);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .modal-actions button:nth-child(2):hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
+  background: var(--btn-cancel-bg-hover);
+  border-color: var(--btn-cancel-border-hover);
 }
 
 /* =============================
@@ -291,11 +378,22 @@ h1 {
   box-shadow: 0 12px 26px rgba(37, 99, 235, 0.45);
 }
 
+/* =============================
+   PHOTO UPLOAD CONTAINER
+============================= */
+.photo-upload-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 /* Modal photo upload wrapper */
 .modal-photo-upload {
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -304,53 +402,48 @@ h1 {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #334155;
+  color: var(--text-label);
   text-align: center;
   align-self: flex-start;
+  transition: color 0.3s ease;
 }
 
 /* Input file */
-.modal-photo-upload input[type="file"] {
+.modal-photo-upload input[type="file"],
+.photo-upload-container input[type="file"] {
   padding: 8px;
   border-radius: 10px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-modal);
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: 12px;
+  background: var(--bg-input);
+  color: var(--text-primary);
 }
 
-.modal-photo-upload input[type="file"]:hover {
+.modal-photo-upload input[type="file"]:hover,
+.photo-upload-container input[type="file"]:hover {
   border-color: #2563eb;
   box-shadow: 0 0 6px rgba(37, 99, 235, 0.2);
 }
 
-/* Foto preview bulat center */
-.photo-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #2563eb;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease;
-  display: block;
-}
-
+/* Photo preview wrapper */
 .photo-preview-wrapper {
   position: relative;
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #e0e0e0, #f8f8f8);
+  background: var(--bg-photo);
   border: 3px solid #2563eb;
   display: flex;
-  align-items: center;        
-  justify-content: center;    
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   margin: 12px auto;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  text-align: center;         
-  line-height: 1;             
+  text-align: center;
+  line-height: 1;
+  transition: background 0.3s ease;
 }
 
 .photo-preview-wrapper:hover {
@@ -358,26 +451,19 @@ h1 {
   transition: transform 0.2s ease;
 }
 
-.photo-preview {
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.btn-remove-photo {
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-
+/* Photo label inside preview */
 .photo-label {
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: var(--text-label);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;             
+  height: 100%;
+  transition: color 0.3s ease;
 }
 
-
+/* Photo preview image */
 .photo-preview {
   width: 120px;
   height: 120px;
@@ -385,18 +471,14 @@ h1 {
   object-fit: cover;
   border: 3px solid #2563eb;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-.photo-upload-container {
-  position: relative; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: block;
 }
 
+/* Remove photo button */
 .btn-remove-photo {
   position: absolute;
-  top: -12px;   
+  top: -12px;
   right: -12px;
   width: 24px;
   height: 24px;
@@ -411,6 +493,7 @@ h1 {
   justify-content: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   z-index: 24;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .btn-remove-photo:hover {
@@ -418,59 +501,9 @@ h1 {
   transform: scale(1.1);
 }
 
-.container {
-  padding: 20px;
-  font-family: sans-serif;
-  position: relative;
-}
-
-.logo {
-  height: 50px;
-}
-
-h1 {
-  margin-bottom: 20px;
-}
-
-/* NODE */
-.node {
-  position: relative;
-  width: 150px;
-  padding: 10px;
-  border: 1px solid #333;
-  border-radius: 8px;
-  margin: 10px;
-  background: #fff;
-  cursor: pointer;
-}
-
-.photo img {
-  width: 100%;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.info {
-  margin-top: 5px;
-}
-
-.name {
-  font-weight: bold;
-}
-
-.title {
-  font-size: 12px;
-  color: #555;
-}
-
-.btn-add {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
-
-/* ANCHORS */
+/* =============================
+   ANCHORS (if used)
+============================= */
 .anchor {
   width: 10px;
   height: 10px;
@@ -481,33 +514,86 @@ h1 {
   z-index: 10;
 }
 
-.anchor.top { top: -5px; left: 50%; transform: translateX(-50%); }
-.anchor.right { right: -5px; top: 50%; transform: translateY(-50%); }
-.anchor.bottom { bottom: -5px; left: 50%; transform: translateX(-50%); }
-.anchor.left { left: -5px; top: 50%; transform: translateY(-50%); }
+.anchor.top {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-/* ORG CHART */
-.org-chart {
+.anchor.right {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.anchor.bottom {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.anchor.left {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* =============================
+   FLOATING ADD NEW BUTTON
+============================= */
+.btn-add-new {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  position: relative;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+    0 8px 24px rgba(37, 99, 235, 0.4),
+    0 4px 12px rgba(124, 58, 237, 0.3);
+  transition: all 0.3s ease;
 }
 
-.tree-node {
-  position: relative;
+.btn-add-new:hover {
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow:
+    0 12px 32px rgba(37, 99, 235, 0.5),
+    0 6px 16px rgba(124, 58, 237, 0.4);
 }
 
-.children {
-  margin-left: 20px;
+.btn-add-new:active {
+  transform: translateX(-50%) translateY(-2px);
 }
 
-/* SVG */
-.lines-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+.btn-add-new-text {
+  display: inline;
+}
+
+/* Responsive: show only icon on smaller screens */
+@media (max-width: 640px) {
+  .btn-add-new {
+    padding: 16px;
+    border-radius: 50%;
+    bottom: 20px;
+  }
+
+  .btn-add-new-text {
+    display: none;
+  }
+}
+
+/* Ensure container has padding at bottom for the floating button */
+.container {
+  padding-bottom: 100px;
 }
