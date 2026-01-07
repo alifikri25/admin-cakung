@@ -127,10 +127,32 @@ export function AuthProvider({ children }) {
         const init = async () => {
             await checkAuthStatus();
 
-            if (refreshToken) {
-                const token = await refreshAccessToken();
-                if (token) {
-                    setIsAuthenticated(true);
+            // Only try to refresh if we have a refresh token in storage
+            const storedToken = localStorage.getItem('refreshToken');
+            if (storedToken) {
+                try {
+                    const res = await fetch(`${API_URL}/api/auth/refresh`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ refresh_token: storedToken }),
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        setAccessToken(data.access_token);
+                        setRefreshToken(storedToken);
+                        setSetupMode(data.setup_mode);
+                        setIsAuthenticated(true);
+                    } else {
+                        // Token is invalid/expired, silently clear it
+                        localStorage.removeItem('refreshToken');
+                        setRefreshToken(null);
+                    }
+                } catch (error) {
+                    // Network error, clear stale token
+                    console.warn('Failed to refresh token on init:', error);
+                    localStorage.removeItem('refreshToken');
+                    setRefreshToken(null);
                 }
             }
 
@@ -138,7 +160,7 @@ export function AuthProvider({ children }) {
         };
 
         init();
-    }, [checkAuthStatus, refreshAccessToken, refreshToken]);
+    }, [checkAuthStatus]);
 
     const value = {
         isAuthenticated,
