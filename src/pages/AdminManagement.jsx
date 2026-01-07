@@ -2,9 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, UserPlus, Trash2, AlertCircle, X, Eye, EyeOff, Check } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_URL } from '../config';
 import './AdminManagement.css';
-
-const API_URL = import.meta.env.VITE_API_URL || "https://cakung-barat-server-1065513777845.asia-southeast2.run.app";
 
 export default function AdminManagement() {
     const navigate = useNavigate();

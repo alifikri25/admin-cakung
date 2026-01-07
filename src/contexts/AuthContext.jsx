@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-
-const API_URL = import.meta.env.VITE_API_URL || "https://cakung-barat-server-1065513777845.asia-southeast2.run.app";
+import { API_URL } from '../config';
 
 const AuthContext = createContext(null);
 

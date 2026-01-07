@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'https://cakung-barat-server-1065513777845.asia-southeast2.run.app';
+import { API_URL } from '../config';
 
 export const assetService = {
     uploadAssets: async (files, postId) => {

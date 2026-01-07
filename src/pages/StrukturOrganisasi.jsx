@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Plus, Edit2, Trash2, X, Save, ChevronDown, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { API_URL } from '../config';
 import "./StrukturOrganisasi.css";
-
-const API_URL = import.meta.env.VITE_API_URL || "https://cakung-barat-server-1065513777845.asia-southeast2.run.app";
 
 // Card dimensions
 const CARD_WIDTH = 200;
