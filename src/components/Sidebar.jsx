@@ -1,20 +1,29 @@
-import { Home, FileText, X, Sun, Moon } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Home, FileText, X, Sun, Moon, Users, LogOut } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Sidebar({ isOpen, onClose }) {
     const location = useLocation();
+    const navigate = useNavigate();
     const { theme, toggleTheme } = useTheme();
+    const { logout } = useAuth();
 
     const menuItems = [
         { path: '/', icon: Home, label: 'Dashboard' },
         { path: '/posts/new', icon: FileText, label: 'New Post' },
-        { path: '/struktur', icon: FileText, label: 'Struktur Organisasi' },
+        { path: '/struktur', icon: Users, label: 'Struktur Organisasi' },
+        { path: '/admin', icon: Users, label: 'Manajemen Admin' },
     ];
 
     const isActive = (path) => {
         if (path === '/') return location.pathname === '/';
         return location.pathname.startsWith(path);
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
     };
 
     return (
@@ -83,8 +92,8 @@ export default function Sidebar({ isOpen, onClose }) {
                     })}
                 </nav>
 
-                {/* Footer with Theme Toggle */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-slate-700">
+                {/* Footer with Theme Toggle and Logout */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-slate-700 space-y-2">
                     <button
                         onClick={toggleTheme}
                         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg 
@@ -105,7 +114,18 @@ export default function Sidebar({ isOpen, onClose }) {
                             </>
                         )}
                     </button>
-                    <div className="text-xs text-gray-400 dark:text-slate-400 text-center mt-3">
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg 
+                                   bg-red-50 dark:bg-red-900/20
+                                   text-red-600 dark:text-red-400
+                                   hover:bg-red-100 dark:hover:bg-red-900/30 
+                                   transition-colors"
+                    >
+                        <LogOut size={18} />
+                        <span className="text-sm font-medium">Logout</span>
+                    </button>
+                    <div className="text-xs text-gray-400 dark:text-slate-400 text-center mt-2">
                         v1.0.0
                     </div>
                 </div>
