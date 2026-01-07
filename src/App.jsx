@@ -1,7 +1,7 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import PostList from './pages/PostList';
 import PostForm from './pages/PostForm';
-import StrukturAdmin from './pages/StrukturAdmin';
+import StrukturOrganisasi from './pages/StrukturOrganisasi';
 import Layout from './components/Layout';
 import './App.css';
 
@@ -13,7 +13,7 @@ function App() {
           <Route path="/" element={<PostList />} />
           <Route path="/posts/new" element={<PostForm />} />
           <Route path="/posts/edit/:id" element={<PostForm />} />
-          <Route path="/struktur" element={<StrukturAdmin />} />
+          <Route path="/struktur" element={<StrukturOrganisasi />} />
         </Routes>
       </Layout>
     </HashRouter>
