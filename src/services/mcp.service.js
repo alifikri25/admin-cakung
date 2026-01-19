@@ -23,6 +23,43 @@ const fileToBase64 = (file) => {
 };
 
 /**
+ * Build explicit prompt for image analysis
+ * The prompt instructs the model exactly what to do with the image
+ */
+const buildImageAnalysisPrompt = () => {
+    return `Kamu adalah AI yang bertugas menganalisis gambar untuk membuat konten berita/postingan website Kelurahan.
+
+TUGAS UTAMA:
+Lihat dan analisis gambar yang diberikan dengan cermat. Berdasarkan APA YANG TERLIHAT DI GAMBAR, buatkan:
+
+1. JUDUL (title):
+   - Buat judul berita yang menarik dan informatif
+   - Harus mendeskripsikan apa yang terlihat di gambar
+   - Maksimal 100 karakter
+   - Dalam Bahasa Indonesia
+
+2. DESKRIPSI (description):
+   - Tulis deskripsi detail tentang gambar dalam format Markdown
+   - Jelaskan: Apa yang terlihat? Siapa yang ada? Apa yang sedang terjadi? Di mana lokasinya?
+   - Gunakan bullet points atau numbered list jika sesuai
+   - Tulis 2-4 paragraf dalam Bahasa Indonesia yang baik
+   - Cocokkan narasi dengan visual yang ada di gambar
+
+PENTING:
+- Fokus pada konten VISUAL yang terlihat di gambar
+- Jangan berasumsi hal yang tidak terlihat di gambar
+- Deskripsi harus akurat menggambarkan gambar
+
+FORMAT RESPONS (JSON):
+{
+  "title": "Judul berita yang sesuai dengan gambar",
+  "description": "Deskripsi markdown yang menjelaskan gambar..."
+}
+
+Sekarang analisis gambar yang diberikan dan berikan respons dalam format JSON di atas.`;
+};
+
+/**
  * Generate title and description from image using MCP Client
  * @param {File} imageFile - The image file to analyze
  * @returns {Promise<{title: string, description: string}>}
@@ -32,21 +69,7 @@ export const generateFromImage = async (imageFile) => {
         const base64Image = await fileToBase64(imageFile);
         const mimeType = imageFile.type || 'image/jpeg';
 
-        const prompt = `Analisis gambar ini dan berikan:
-
-1. **Judul**: Buat judul yang menarik dan informatif dalam Bahasa Indonesia (maksimal 100 karakter)
-
-2. **Deskripsi**: Buat deskripsi detail dalam format Markdown dengan struktur berikut:
-   - Gunakan heading, bullet points, atau numbered lists jika sesuai
-   - Jelaskan konteks dan detail penting dari gambar
-   - Tulis dalam Bahasa Indonesia yang baik dan benar
-   - Panjang 2-4 paragraf
-
-Berikan respons dalam format JSON seperti ini:
-{
-  "title": "Judul yang menarik",
-  "description": "Deskripsi dalam format **markdown**..."
-}`;
+        const prompt = buildImageAnalysisPrompt();
 
         const requestBody = {
             prompt: prompt,
@@ -57,7 +80,7 @@ Berikan respons dalam format JSON seperti ini:
                     data: base64Image
                 }
             ],
-            agent: false  // Direct chat mode, no tool execution
+            agent: false  // Direct chat mode, bypasses system prompts
         };
 
         const response = await fetch(`${MCP_API_URL}/chat`, {
@@ -89,6 +112,12 @@ Berikan respons dalam format JSON seperti ini:
         const jsonMatch = textResponse.match(/```(?:json)?\s*([\s\S]*?)```/);
         if (jsonMatch) {
             jsonStr = jsonMatch[1];
+        }
+
+        // Try to extract JSON object if text has extra content
+        const jsonObjectMatch = jsonStr.match(/\{[\s\S]*\}/);
+        if (jsonObjectMatch) {
+            jsonStr = jsonObjectMatch[0];
         }
 
         const result = JSON.parse(jsonStr.trim());
