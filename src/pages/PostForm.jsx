@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postingService } from '../services/posting.service';
 import { assetService } from '../services/asset.service';
-import { geminiService } from '../services/gemini.service';
+import { mcpService } from '../services/mcp.service';
 import MarkdownEditor from '../components/MarkdownEditor';
 import ImageUploader from '../components/ImageUploader';
 import { Save, X, Plus } from 'lucide-react';
@@ -71,7 +71,7 @@ export default function PostForm() {
 
         setAiGenerating(true);
         try {
-            const result = await geminiService.generateFromImage(preview.file);
+            const result = await mcpService.generateFromImage(preview.file);
             setFormData(prev => ({
                 ...prev,
                 title: result.title || prev.title,
