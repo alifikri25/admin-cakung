@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postingService } from '../services/posting.service';
 import { assetService } from '../services/asset.service';
+import { mcpService } from '../services/mcp.service';
 import MarkdownEditor from '../components/MarkdownEditor';
 import ImageUploader from '../components/ImageUploader';
 import { Save, X, Plus } from 'lucide-react';
@@ -30,6 +31,7 @@ export default function PostForm() {
     const [newCategory, setNewCategory] = useState('');
     const [showAddCategory, setShowAddCategory] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [aiGenerating, setAiGenerating] = useState(false);
 
     useEffect(() => {
         if (isEdit) {
@@ -58,6 +60,28 @@ export default function PostForm() {
             setFormData({ ...formData, category: newCategory });
             setNewCategory('');
             setShowAddCategory(false);
+        }
+    };
+
+    const handleAIGenerate = async (preview) => {
+        if (!preview || !preview.file) {
+            alert('Tidak ada gambar untuk dianalisis');
+            return;
+        }
+
+        setAiGenerating(true);
+        try {
+            const result = await mcpService.generateFromImage(preview.file);
+            setFormData(prev => ({
+                ...prev,
+                title: result.title || prev.title,
+                excerpt: result.description || prev.excerpt,
+            }));
+        } catch (error) {
+            console.error('AI Generation failed:', error);
+            alert('Gagal generate dengan AI: ' + error.message);
+        } finally {
+            setAiGenerating(false);
         }
     };
 
@@ -111,6 +135,19 @@ export default function PostForm() {
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-4 lg:p-6 space-y-6 border border-gray-100 dark:border-gray-700">
+                {/* Images - Moved to top */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Images
+                    </label>
+                    <ImageUploader
+                        images={images}
+                        onChange={setImages}
+                        onGenerateAI={handleAIGenerate}
+                        isGenerating={aiGenerating}
+                    />
+                </div>
+
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Title
@@ -196,13 +233,6 @@ export default function PostForm() {
                     />
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Images
-                    </label>
-                    <ImageUploader images={images} onChange={setImages} />
-                </div>
-
                 <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4">
                     <button
                         type="button"
@@ -224,3 +254,4 @@ export default function PostForm() {
         </div>
     );
 }
+
